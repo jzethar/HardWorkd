@@ -1,0 +1,50 @@
+Learn Language Project 
+NAME: HardWor(k)d
+
+
+TODO Plan:
+
+DONE 1. Read words from csv file and put it in a table with opportunity to select words and correct them.
+    After it to print in another file row by row.
+    Useful tips:
+        1.1. I used flags that gives pos to make field Checkable, Enabled and Editable
+        1.2. data for QAbstractTableModel - is a function that shows you the table row by row
+        1.3. setData can work without my events, it was made events for diff roles by default
+DONE 2. Research about SQlite, how it works and add function to print words from CSV to SQlite db
+    Useful tips:
+        1.1. To include SQlite we can use QT drivers and libs, just add 'Sql' in find_package and include QSqlDatabase
+        1.2. It was done insert operation for words, but not selecting. It gonna for the next (4);
+---3. Add table with verbs and opportunity to insert them there
+4. Add simple game with word -> translation
+    DONE 4.0. Add possibility to move between windows of the game and start window
+         Useful tips:
+            1. We can inherit QWidget class and override constructors to make our own widgets. It's useful for new "windows" in app
+            2. Before setCentralWidget we need to allocate the widget, because after unsetting it - it will be deleted.
+            3. We can send signals between classes of widgets -> useful for events in the main class
+    4.1. Collect a score of the game and save it in SQlite
+        4.1.1. Show the score on the main window
+        DONE 4.1.2. Collect the score from the game 
+            Useful tips:
+                1. We can send from signal to slot data with our own structures
+                2. If function of class doesn't change the state we need to use declare it with const
+                3. If we use const variable we can use only const methods???? RESEARCH
+    4.2. Opportunity to choose amount of words
+    4.3. Opportunity to play game with or without timer
+    4.4. Opportunity to repeat words after fail 
+    4.5. Opportunity to collect fails of words and mark them in the table (1 is 1 error, 2 - 2 times, 3 - 3tm and etc)
+    4.6. Opportunity to repeat words that had a lot of fails
+    4.7. After the game - save the time of the words (word - time when it was used)
+    4.8. Opportunity to repeat words that hadn't been repeated for a long time
+5. Add second game verb -> usage (times or conduction)
+    5.1. Create rules of parsing verbs
+    5.2. Opportunity to ask verb in first/second/third persons and etc
+    5.3. Opportunity to ask verb in times
+    5.4. Opportunity to save fully irregular verbs
+6. Language constructor
+7. Add third adjective game: word (she/he) -> translation 
+
+Futures:
+a. Update function for different types of deliminator and opportunity to read words with ""
+b. Check if the connector is the same with new
+c. Check that it will not remove and create another table 
+
