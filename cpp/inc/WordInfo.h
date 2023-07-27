@@ -37,12 +37,27 @@ typedef struct ScoreInfo
         this->timestamp = timestamp;
     }
 
+    ScoreInfo()
+    {
+        this->score = 0;
+        this->timestamp = 0;
+    }
+
     QString serializeScoreInfo() const
     {
         QDateTime time;
         time.setMSecsSinceEpoch(timestamp);
         QString outInfo = "Time: " + time.toString() + QString(" Score: ") + QString::number(score);
         return outInfo;
+    }
+
+    QString serializeScore() const {
+        return QString(" Score: ") + QString::number(score);
+    }
+    QString serializeTime() const {
+        QDateTime dateTime;
+        dateTime.setMSecsSinceEpoch(timestamp);
+        return QString("Time: ") + dateTime.toString();
     }
 
 } ScoreInfo;

@@ -23,6 +23,7 @@ void StartWin::stopGameWid(const ScoreInfo& score)
 {
     qDebug() << score.serializeScoreInfo();
     startWid = new StartWid(this);
+    startWid->setDatabase(databaseService);
     connect(startWid, SIGNAL(startGameSig()), this, SLOT(startGameWid()));
     setCentralWidget(startWid);
 }

@@ -50,7 +50,7 @@ bool DatabaseService::createTableScore()
     bool success = true;
 
     QSqlQuery query;
-    query.prepare("CREATE TABLE IF NOT exists score(id INTEGER PRIMARY KEY, date INTEGER, score INTEGER);");
+    query.prepare("CREATE TABLE IF NOT exists score(date INTEGER, score INTEGER);");
 
     if (!query.exec())
     {
@@ -88,6 +88,29 @@ DatabaseService::~DatabaseService()
     if (wordsDatabase.isOpen())
     {
         wordsDatabase.close();
+    }
+}
+
+bool DatabaseService::getLastScore(ScoreInfo &score) const
+{
+    QSqlQuery querySelectScore;
+    querySelectScore.prepare("SELECT * from score where date = (select max(date) from score);");
+    if (querySelectScore.exec())
+    {
+        if (querySelectScore.next())
+        {
+            score.timestamp = querySelectScore.value(0).toLongLong();
+            score.score = querySelectScore.value(1).toInt();
+            return true;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+        return false;
     }
 }
 

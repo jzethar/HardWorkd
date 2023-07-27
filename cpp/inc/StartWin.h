@@ -22,6 +22,8 @@ public:
 private:
     StartWid *startWid = new StartWid(this);
     GameWid *gameWid = new GameWid(this);
+
+    // TODO make database as shared_ptr
     DatabaseService databaseService = DatabaseService();
 
 private slots:

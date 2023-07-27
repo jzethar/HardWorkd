@@ -22,12 +22,15 @@ DONE 2. Research about SQlite, how it works and add function to print words from
             2. Before setCentralWidget we need to allocate the widget, because after unsetting it - it will be deleted.
             3. We can send signals between classes of widgets -> useful for events in the main class
     4.1. Collect a score of the game and save it in SQlite
-        4.1.1. Show the score on the main window
-        DONE 4.1.2. Collect the score from the game 
+        DONE 4.1.1. Show the score on the main window
+            Useful tips:
+                    1. SQlite doesn't have AUTOINCREMENT (wow)
+        DONE 4.1.2. Collect the score from the game
             Useful tips:
                 1. We can send from signal to slot data with our own structures
                 2. If function of class doesn't change the state we need to use declare it with const
                 3. If we use const variable we can use only const methods???? RESEARCH
+        
     4.2. Opportunity to choose amount of words
     4.3. Opportunity to play game with or without timer
     4.4. Opportunity to repeat words after fail 
@@ -47,4 +50,6 @@ Futures:
 a. Update function for different types of deliminator and opportunity to read words with ""
 b. Check if the connector is the same with new
 c. Check that it will not remove and create another table 
+d. Beautify main window - make more user friendly with the score table
+e. Make databaseService as a shared_ptr
 
