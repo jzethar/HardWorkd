@@ -3,10 +3,13 @@
 
 GameWid::GameWid(QWidget *parent)
 {
+    gameSettingsWid = new GameSettingsWid(this);
     this->gameWidLayoutV->addWidget(nmFile);
     this->gameWidLayoutV->addWidget(stopGame);
     this->setLayout(gameWidLayoutV);
     connect(stopGame, SIGNAL(clicked()), this, SLOT(stopGameSlot()));
+    connect(gameSettingsWid, SIGNAL(startGameWithSettingsSig(GameSettings)), this, SLOT(startGameWid(GameSettings)));
+    gameSettingsWid->show();
 }
 
 GameWid::~GameWid()
@@ -16,7 +19,14 @@ GameWid::~GameWid()
     delete gameWidLayoutV;
 }
 
-void GameWid::stopGameSlot() {
+void GameWid::startGameWid(GameSettings settings)
+{
+    gameSettingsWid->close();
+    this->settings = settings;
+}
+
+void GameWid::stopGameSlot()
+{
     // qDebug() << QDateTime::currentDateTime().toMSecsSinceEpoch();
     ScoreInfo scoreInfo = ScoreInfo(QDateTime::currentDateTime().toMSecsSinceEpoch(), score);
     emit stopGameSig(scoreInfo);

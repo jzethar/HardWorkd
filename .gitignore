@@ -3,3 +3,4 @@ build
 *.wdb
 *.csv
 *.txt
+!CMakeLists.txt

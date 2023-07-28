@@ -30,9 +30,11 @@ DONE 2. Research about SQlite, how it works and add function to print words from
                 1. We can send from signal to slot data with our own structures
                 2. If function of class doesn't change the state we need to use declare it with const
                 3. If we use const variable we can use only const methods???? RESEARCH
-        
-    4.2. Opportunity to choose amount of words
+        DONE 4.1.3. Save score in database
+    DONE 4.2. Opportunity to choose amount of words
     4.3. Opportunity to play game with or without timer
+        DONE 4.3.1 Opportunity to play game with timer
+        4.3.2. Disable opportunity to play with timer
     4.4. Opportunity to repeat words after fail 
     4.5. Opportunity to collect fails of words and mark them in the table (1 is 1 error, 2 - 2 times, 3 - 3tm and etc)
     4.6. Opportunity to repeat words that had a lot of fails
@@ -51,5 +53,6 @@ a. Update function for different types of deliminator and opportunity to read wo
 b. Check if the connector is the same with new
 c. Check that it will not remove and create another table 
 d. Beautify main window - make more user friendly with the score table
-e. Make databaseService as a shared_ptr
+DONE e. Make databaseService as a shared_ptr
+f. Make all pointers safe (shared or unique)
 

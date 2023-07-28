@@ -21,10 +21,10 @@ public:
 
 private:
     StartWid *startWid = new StartWid(this);
-    GameWid *gameWid = new GameWid(this);
+    GameWid *gameWid;
 
     // TODO make database as shared_ptr
-    DatabaseService databaseService = DatabaseService();
+    std::shared_ptr<DatabaseService> databaseService = std::make_shared<DatabaseService>();
 
 private slots:
     void startGameWid();

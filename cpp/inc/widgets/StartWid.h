@@ -15,9 +15,9 @@ class StartWid : public QWidget
     
 public:
     StartWid(QWidget *parent = nullptr);
-    StartWid(QWidget *parent, const DatabaseService& dataService);
+    StartWid(QWidget *parent, std::shared_ptr<DatabaseService> databaseService);
     ~StartWid();
-    void setDatabase(const DatabaseService& dataService);
+    void setDatabase(std::shared_ptr<DatabaseService> databaseService);
 
 private:
     QLabel *labelScore = new QLabel(this);
@@ -25,7 +25,7 @@ private:
     QPushButton *startGame = new QPushButton(QString("Start Game"));
     QVBoxLayout *startWidLayoutV = new QVBoxLayout;
 
-    DatabaseService databaseService;
+    std::shared_ptr<DatabaseService> databaseService;
 
 private slots:
     void startGameSlot();

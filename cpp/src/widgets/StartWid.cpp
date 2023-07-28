@@ -21,13 +21,13 @@ void StartWid::startGameSlot() {
     emit startGameSig();
 }
 
-void StartWid::setDatabase(const DatabaseService &databaseService)
+void StartWid::setDatabase(std::shared_ptr<DatabaseService> databaseService)
 {
     this->databaseService = databaseService;
-    if (this->databaseService.isOpen())
+    if (this->databaseService->isOpen())
     {
         ScoreInfo score;
-        if (databaseService.getLastScore(score))
+        if (this->databaseService->getLastScore(score))
         {
             QFont fontScore = labelScore->font();
             QFont fontTime = labelTime->font();

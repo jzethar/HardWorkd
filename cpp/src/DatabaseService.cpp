@@ -138,3 +138,21 @@ bool DatabaseService::saveNewWords(const QList<WordInfo> &words)
     }
     return true;
 }
+
+bool DatabaseService::saveScore(const ScoreInfo &score)
+{
+    QSqlQuery querySaveScore;
+    querySaveScore.prepare("INSERT INTO score VALUES (:date, :score)");
+    querySaveScore.bindValue(":date", score.timestamp);
+    querySaveScore.bindValue(":score", score.score);
+
+    if (querySaveScore.exec())
+    {
+        return true;
+    }
+    else
+    {
+        qDebug() << "add person failed: " << querySaveScore.lastError();
+        return false;
+    }
+}

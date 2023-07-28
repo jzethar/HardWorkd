@@ -62,4 +62,22 @@ typedef struct ScoreInfo
 
 } ScoreInfo;
 
+typedef struct GameSettings
+{
+    unsigned char words;
+    unsigned char timer;
+
+    GameSettings(unsigned char words, unsigned char timer)
+    {
+        this->timer = timer;
+        this->words = words;
+    }
+
+    GameSettings() {
+        words = 0;
+        timer = 0;
+    }
+
+} GameSettings;
+
 #endif

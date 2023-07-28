@@ -21,6 +21,7 @@ class DatabaseService {
     }
     
     bool saveNewWords(const QList<WordInfo> &words);
+    bool saveScore(const ScoreInfo& score);
     bool getLastScore(ScoreInfo &score) const;
 
     // tables
