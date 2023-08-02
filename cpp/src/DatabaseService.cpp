@@ -34,7 +34,7 @@ bool DatabaseService::createTableWords()
     bool success = true;
 
     QSqlQuery query;
-    query.prepare("CREATE TABLE IF NOT exists words(id INTEGER PRIMARY KEY, word TEXT, translation TEXT);");
+    query.prepare("CREATE TABLE IF NOT exists words(id INTEGER PRIMARY KEY AUTOINCREMENT, word TEXT, translation TEXT);");
 
     if (!query.exec())
     {
@@ -89,6 +89,33 @@ DatabaseService::~DatabaseService()
     {
         wordsDatabase.close();
     }
+}
+
+bool DatabaseService::getWords(QList<WordInfo> &words, int amountOfWords, bool getLastWords) const
+{
+    QSqlQuery querySelectWords;
+    QString selectWords = QString("SELECT word, translation from words ") + QString(getLastWords ? " order by id DESC " : "") + QString("LIMIT ") + QString::number(amountOfWords) + ";";
+    querySelectWords.prepare(selectWords);
+    if (querySelectWords.exec())
+    {
+        if (querySelectWords.next())
+        {
+            WordInfo word;
+            word.word = querySelectWords.value(0).toString();
+            word.translation = querySelectWords.value(1).toString();
+            words.insert(words.end(), word);
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+        qDebug() << querySelectWords.lastError();
+        return false;
+    }
+    return false;
 }
 
 bool DatabaseService::getLastScore(ScoreInfo &score) const

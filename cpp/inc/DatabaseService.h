@@ -7,21 +7,17 @@
 class DatabaseService {
     public:
     DatabaseService(const QString& path);
-    // DatabaseService(const DatabaseService& service);
     DatabaseService();
 
     ~DatabaseService();
 
     bool isOpen() const;
     bool createDatabase(const QString &path);
-
-    bool selectScore() 
-    {
-        return true;
-    }
     
     bool saveNewWords(const QList<WordInfo> &words);
     bool saveScore(const ScoreInfo& score);
+
+    bool getWords(QList<WordInfo> &words, int amountOfWords, bool getLastWords = false) const;
     bool getLastScore(ScoreInfo &score) const;
 
     // tables

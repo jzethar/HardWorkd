@@ -51,10 +51,12 @@ typedef struct ScoreInfo
         return outInfo;
     }
 
-    QString serializeScore() const {
+    QString serializeScore() const
+    {
         return QString(" Score: ") + QString::number(score);
     }
-    QString serializeTime() const {
+    QString serializeTime() const
+    {
         QDateTime dateTime;
         dateTime.setMSecsSinceEpoch(timestamp);
         return QString("Time: ") + dateTime.toString();
@@ -66,6 +68,7 @@ typedef struct GameSettings
 {
     unsigned char words;
     unsigned char timer;
+    bool playWithTimer = true;
 
     GameSettings(unsigned char words, unsigned char timer)
     {
@@ -73,7 +76,15 @@ typedef struct GameSettings
         this->words = words;
     }
 
-    GameSettings() {
+    GameSettings(unsigned char words)
+    {
+        this->timer = 0;
+        this->words = words;
+        this->playWithTimer = false;
+    }
+
+    GameSettings()
+    {
         words = 0;
         timer = 0;
     }

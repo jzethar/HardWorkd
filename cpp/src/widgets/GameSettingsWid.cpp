@@ -7,8 +7,8 @@ GameSettingsWid::GameSettingsWid(QWidget *parent)
     setupWordsSpinBox();
     setupTimerSpinBox();
     setView();
-    connect(startGame, SIGNAL(clicked()), this, SLOT(stopGameSlot()));
-    connect(this, SIGNAL(close()), this, SLOT(startGameWithSettings()));
+    connect(checkPlayWithTimer, SIGNAL(stateChanged(int)), this, SLOT(checkedPlayedWithTimer(int)));
+    connect(this, SIGNAL(destroyed(QObject*)), this, SLOT(startGameWithSettings()));
     connect(startGame, SIGNAL(clicked()), this, SLOT(startGameWithSettings()));
     setFixedSize(200, 200);
 }
@@ -31,6 +31,7 @@ void GameSettingsWid::setView()
 {
     this->settingsWidLayoutV->addWidget(wordsLabel);
     this->settingsWidLayoutV->addWidget(wordsAmount);
+    this->settingsWidLayoutV->addWidget(checkPlayWithTimer);
     this->settingsWidLayoutV->addWidget(timerLabel);
     this->settingsWidLayoutV->addWidget(secondsAmount);
     this->settingsWidLayoutV->addWidget(startGame);
@@ -44,8 +45,36 @@ GameSettingsWid::~GameSettingsWid()
     // delete gameWidLayoutV;
 }
 
+#define STARTGAME                                                                \
+    if (this->checkPlayWithTimer->isChecked())                                   \
+    {                                                                            \
+        GameSettings gameSettings(wordsAmount->value(), secondsAmount->value()); \
+        emit startGameWithSettingsSig(gameSettings);                             \
+    }                                                                            \
+    else                                                                         \
+    {                                                                            \
+        GameSettings gameSettings(wordsAmount->value());                         \
+        emit startGameWithSettingsSig(gameSettings);                             \
+    }
+
+void GameSettingsWid::checkedPlayedWithTimer(int state)
+{
+    this->secondsAmount->setEnabled(!state);
+    return;
+}
+
 void GameSettingsWid::startGameWithSettings()
 {
-    GameSettings gameSettings(wordsAmount->value(), secondsAmount->value());
-    emit startGameWithSettingsSig(gameSettings);
+    qDebug() << "start game";
+    gameWasStarted = true;
+    STARTGAME
+}
+
+void GameSettingsWid::closeEvent(QCloseEvent *event)
+{
+    if (!gameWasStarted)
+    {
+        STARTGAME
+        qDebug() << "close window";
+    }
 }

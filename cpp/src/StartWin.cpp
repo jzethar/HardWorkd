@@ -6,6 +6,7 @@ StartWin::StartWin(QWidget *parent) : QMainWindow(parent)
     setWindowTitle(QString("Hard Wor(k)d"));
     databaseService->createDatabase("main.wdb");
     startWid->setDatabase(databaseService);
+    gameWid->setDatabase(databaseService);
     setCentralWidget(startWid);
     connect(startWid, SIGNAL(startGameSig()), this, SLOT(startGameWid()));
     // connect(gameWid, SIGNAL(stopGameSig(const ScoreInfo&)), this, SLOT(stopGameWid(const ScoreInfo&)));
@@ -15,6 +16,7 @@ StartWin::StartWin(QWidget *parent) : QMainWindow(parent)
 void StartWin::startGameWid()
 {
     gameWid = new GameWid(this);
+    gameWid->setDatabase(databaseService);
     connect(gameWid, SIGNAL(stopGameSig(const ScoreInfo&)), this, SLOT(stopGameWid(const ScoreInfo&)));
     setCentralWidget(gameWid);
 }

@@ -34,12 +34,18 @@ DONE 2. Research about SQlite, how it works and add function to print words from
     DONE 4.2. Opportunity to choose amount of words
     4.3. Opportunity to play game with or without timer
         DONE 4.3.1 Opportunity to play game with timer
-        4.3.2. Disable opportunity to play with timer
+        DONE 4.3.2. Disable opportunity to play with timer
+        4.3.3. Create timer for a game
     4.4. Opportunity to repeat words after fail 
     4.5. Opportunity to collect fails of words and mark them in the table (1 is 1 error, 2 - 2 times, 3 - 3tm and etc)
     4.6. Opportunity to repeat words that had a lot of fails
     4.7. After the game - save the time of the words (word - time when it was used)
     4.8. Opportunity to repeat words that hadn't been repeated for a long time
+    4.9. Select words from Database
+        DONE 4.9.1 Select words by amount
+            Useful tips:
+                1. For a widget we can add event closeEvent(QEvent *event) - it will be woke every time when we close the window with widget
+        4.9.2. Select last words (need to add checkbox last)
 5. Add second game verb -> usage (times or conduction)
     5.1. Create rules of parsing verbs
     5.2. Opportunity to ask verb in first/second/third persons and etc

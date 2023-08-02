@@ -9,6 +9,7 @@
 #include "WordInfo.h"
 #include <QLabel>
 #include <QSpinBox>
+#include <QCheckBox>
 
 class GameSettingsWid : public QDialog
 {
@@ -26,12 +27,19 @@ private:
     QLabel *wordsLabel = new QLabel("Enter amount of words");
     QLabel *timerLabel = new QLabel("Enter time for a word (s)");
 
+    QCheckBox *checkPlayWithTimer = new QCheckBox("Case sensitive");
+
+    bool gameWasStarted = false; // to not duplicate emit of signal
+
     void setupWordsSpinBox();
     void setupTimerSpinBox();
     void setView();
 
+    void closeEvent(QCloseEvent *event);
+
 private slots:
     void startGameWithSettings();
+    void checkedPlayedWithTimer(int state);
 
 signals:
     void startGameWithSettingsSig(GameSettings settings);
