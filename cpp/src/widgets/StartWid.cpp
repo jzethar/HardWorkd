@@ -1,12 +1,22 @@
 #include "widgets/StartWid.h"
+#include <QMessageBox>
+#include<QFileDialog>
+
+// TODO read about inline functions or how to beautify it
 
 StartWid::StartWid(QWidget *parent)
 {
     this->startWidLayoutV->addWidget(labelTime);
     this->startWidLayoutV->addWidget(labelScore);
+    this->databaseLayoutH->addWidget(databaseFile);
+    this->databaseLayoutH->addWidget(chooseDbButton);
+    this->startWidLayoutV->addLayout(databaseLayoutH);
     this->startWidLayoutV->addWidget(startGame);
+    this->startWidLayoutV->addWidget(uploadCSVFile);
     this->setLayout(startWidLayoutV);
     connect(startGame, SIGNAL(clicked()), this, SLOT(startGameSlot()));
+    connect(uploadCSVFile, SIGNAL(clicked()), this, SLOT(uploadFileSlot()));
+    connect(chooseDbButton, SIGNAL(clicked()), this, SLOT(chooseDatabaseFile()));
 }
 
 StartWid::~StartWid()
@@ -17,8 +27,25 @@ StartWid::~StartWid()
     delete labelTime;
 }
 
+void StartWid::chooseDatabaseFile()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, 
+                                                    tr("Choose a place"), "", 
+                                                    tr("WDB files (*.wdb)"));
+    databaseFile->setText(fileName);
+    if (!databaseService->createDatabase(fileName))
+    {
+        QMessageBox::critical(this, "Attention", "Can't create database");
+        return;
+    }
+}
+
 void StartWid::startGameSlot() {
     emit startGameSig();
+}
+
+void StartWid::uploadFileSlot() {
+    emit uploadFileSig();
 }
 
 void StartWid::setDatabase(std::shared_ptr<DatabaseService> databaseService)

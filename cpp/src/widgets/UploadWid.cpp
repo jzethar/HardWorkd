@@ -2,68 +2,57 @@
 #include <utility>
 #include "QHeaderView"
 #include <QMessageBox>
-#include "mainwindow.h"
+#include "widgets/UploadWid.h"
 
 
-LearnWin::LearnWin(QWidget *parent) : QMainWindow(parent)
+UploadWid::UploadWid(QWidget *parent)
 {
-    setCentralWidget(LearnViewerWid);
     this->nmNchsLayoutH->addWidget(nmFile);
     this->nmNchsLayoutH->addWidget(chsFile);
-    this->nmNchsLayoutH->addWidget(saveFile);
-    this->nmNchsLayoutH->addWidget(chooseDb);
+    // this->nmNchsLayoutH->addWidget(saveFile);
+    // this->nmNchsLayoutH->addWidget(chooseDb);
     this->nmNchsLayoutH->addWidget(saveWordsInDb);
     this->table = new TableModel(this);
     this->CSVTable->setModel(table);
     this->CSVTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     LearnLayoutV->addLayout(nmNchsLayoutH);
     LearnLayoutV->addWidget(CSVTable);
-    LearnViewerWid->setLayout(LearnLayoutV);
+    this->setLayout(LearnLayoutV);
     connect(chsFile, SIGNAL(clicked()), this, SLOT(chooseCSVFile()));
-    connect(saveFile, SIGNAL(clicked()), this, SLOT(saveNewFile()));
-    connect(chooseDb, SIGNAL(clicked()), this, SLOT(chooseDatabaseFile())); 
     connect(saveWordsInDb, SIGNAL(clicked()), this, SLOT(saveInDatabase())); 
     setFixedSize(600, 600);
 }
 
-void LearnWin::chooseDatabaseFile()
+// TODO add check for opened / existed database
+void UploadWid::setDatabase(std::shared_ptr<DatabaseService> databaseService)
 {
-    QString fileName = QFileDialog::getSaveFileName(this, 
-                                                    tr("Choose a place"), "", 
-                                                    tr("WDB files (*.wdb)"));
-    nmFile->setText(fileName);
-    if (!databaseService.createDatabase(fileName))
+    this->databaseService = databaseService;
+    if (this->databaseService->isOpen())
     {
-        QMessageBox::critical(this, "Attention", "Can't create database");
         return;
     }
+}
+
+void UploadWid::saveInDatabase() 
+{
     QList<WordInfo> words = table->getList();
-    if (!databaseService.saveNewWords(words))
+    if (!databaseService->saveNewWords(words))
     {
         QMessageBox::critical(this, "Attention", "Can't save in database");
         return;
     }
+    emit uploadDoneSig();
 }
 
-void LearnWin::saveInDatabase() 
-{
-    QList<WordInfo> words = table->getList();
-    if (!databaseService.saveNewWords(words))
-    {
-        QMessageBox::critical(this, "Attention", "Can't save in database");
-        return;
-    }
-}
+// void UploadWid::saveNewFile()
+// {
+//     QString fileName = QFileDialog::getSaveFileName(this, tr("Choose a place"), "");
+//     nmFile->setText(fileName);
+//     writeCSVFile(fileName);
+//     // resWin();
+// }
 
-void LearnWin::saveNewFile()
-{
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Choose a place"), "");
-    nmFile->setText(fileName);
-    writeCSVFile(fileName);
-    // resWin();
-}
-
-void LearnWin::chooseCSVFile()
+void UploadWid::chooseCSVFile()
 {
     if (table->rowCount(QModelIndex()) > 0)
     {
@@ -78,7 +67,7 @@ void LearnWin::chooseCSVFile()
     readCSVWords(fileName);
 }
 
-void LearnWin::writeCSVFile(QString fileName)
+void UploadWid::writeCSVFile(QString fileName)
 {
     std::map<QString, QString> translation_dict;
     QString encoding = "utf-16";
@@ -96,7 +85,7 @@ void LearnWin::writeCSVFile(QString fileName)
     }
 }
 
-void LearnWin::readCSVWords(QString fileName) {
+void UploadWid::readCSVWords(QString fileName) {
     std::map<QString, QString> translation_dict;
     QString encoding = "utf-16";
     QFile file(fileName);

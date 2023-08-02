@@ -48,12 +48,12 @@ GameSettingsWid::~GameSettingsWid()
 #define STARTGAME                                                                \
     if (this->checkPlayWithTimer->isChecked())                                   \
     {                                                                            \
-        GameSettings gameSettings(wordsAmount->value(), secondsAmount->value()); \
+        GameSettings gameSettings(wordsAmount->value());                         \
         emit startGameWithSettingsSig(gameSettings);                             \
     }                                                                            \
     else                                                                         \
     {                                                                            \
-        GameSettings gameSettings(wordsAmount->value());                         \
+        GameSettings gameSettings(wordsAmount->value(), secondsAmount->value()); \
         emit startGameWithSettingsSig(gameSettings);                             \
     }
 

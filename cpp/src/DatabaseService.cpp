@@ -98,17 +98,14 @@ bool DatabaseService::getWords(QList<WordInfo> &words, int amountOfWords, bool g
     querySelectWords.prepare(selectWords);
     if (querySelectWords.exec())
     {
-        if (querySelectWords.next())
+        while (querySelectWords.next())
         {
             WordInfo word;
             word.word = querySelectWords.value(0).toString();
             word.translation = querySelectWords.value(1).toString();
             words.insert(words.end(), word);
         }
-        else
-        {
-            return true;
-        }
+        return true;
     }
     else
     {

@@ -17,24 +17,24 @@
 #include "WordInfo.h"
 
 
-class LearnWin : public QMainWindow
+class UploadWid : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit LearnWin(QWidget *parent = Q_NULLPTR);
-    virtual ~LearnWin() {}
+    explicit UploadWid(QWidget *parent = Q_NULLPTR);
+    virtual ~UploadWid() {}
+    void setDatabase(std::shared_ptr<DatabaseService> databaseService);
 
 
 private:
-    QWidget *LearnViewerWid = new QWidget;
+    // QWidget *LearnViewerWid = new QWidget;
     QVBoxLayout *LearnLayoutV = new QVBoxLayout;
 
     QLineEdit *nmFile = new QLineEdit;
     QHBoxLayout *nmNchsLayoutH = new QHBoxLayout;
     QPushButton *chsFile = new QPushButton(QString("Choose CSV"));
     QPushButton *saveFile = new QPushButton(QString("Save words"));
-    QPushButton *chooseDb = new QPushButton(QString("Choose database"));
     QPushButton *saveWordsInDb = new QPushButton(QString("Save in database"));
 
     TableModel *table ;
@@ -42,15 +42,18 @@ private:
     QVBoxLayout *CSVLayoutV = new QVBoxLayout;
 
     std::vector<WordInfo> fileInfoVec;
-    DatabaseService databaseService;
+    std::shared_ptr<DatabaseService> databaseService;
 
 private slots:
     void readCSVWords(QString fileName);
     void writeCSVFile(QString fileName);
     void chooseCSVFile();
-    void saveNewFile();
-    void chooseDatabaseFile();
+    // void saveNewFile();
+    // void chooseDatabaseFile();
     void saveInDatabase();
+
+signals:
+    void uploadDoneSig();
 
 };
 

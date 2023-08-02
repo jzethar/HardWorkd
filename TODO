@@ -46,6 +46,8 @@ DONE 2. Research about SQlite, how it works and add function to print words from
             Useful tips:
                 1. For a widget we can add event closeEvent(QEvent *event) - it will be woke every time when we close the window with widget
         4.9.2. Select last words (need to add checkbox last)
+    4.10. Implement (1) and (2) as widget
+        4.10.1. Save words in db from StartWid
 5. Add second game verb -> usage (times or conduction)
     5.1. Create rules of parsing verbs
     5.2. Opportunity to ask verb in first/second/third persons and etc
@@ -61,4 +63,5 @@ c. Check that it will not remove and create another table
 d. Beautify main window - make more user friendly with the score table
 DONE e. Make databaseService as a shared_ptr
 f. Make all pointers safe (shared or unique)
-
+g. Read about inline functions or how to beautify it (beautify addition of widgets in each Widget)
+h. Add check for opened / existed database in all Widgets

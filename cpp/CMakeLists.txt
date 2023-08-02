@@ -41,7 +41,7 @@ include_directories(inc)
 # Add the Qt6 libraries and modules
 add_executable(HardWord src/main.cpp 
                     inc/WordInfo.h
-                    src/mainwindow.cpp inc/mainwindow.h 
+                    src/widgets/UploadWid.cpp inc/widgets/UploadWid.h 
                     src/TableModel.cpp inc/TableModel.h
                     src/DatabaseService.cpp inc/DatabaseService.h
                     src/StartWin.cpp inc/StartWin.h

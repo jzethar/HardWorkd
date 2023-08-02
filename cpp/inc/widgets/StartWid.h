@@ -23,15 +23,23 @@ private:
     QLabel *labelScore = new QLabel(this);
     QLabel *labelTime = new QLabel(this);
     QPushButton *startGame = new QPushButton(QString("Start Game"));
+    QPushButton *uploadCSVFile = new QPushButton(QString("Upload CSV"));
     QVBoxLayout *startWidLayoutV = new QVBoxLayout;
+
+    QLineEdit *databaseFile = new QLineEdit;
+    QPushButton *chooseDbButton = new QPushButton(QString("Choose database"));
+    QHBoxLayout *databaseLayoutH = new QHBoxLayout;
 
     std::shared_ptr<DatabaseService> databaseService;
 
 private slots:
     void startGameSlot();
+    void uploadFileSlot();
+    void chooseDatabaseFile();
 
 signals:
     void startGameSig();
+    void uploadFileSig();
 };
 
 
