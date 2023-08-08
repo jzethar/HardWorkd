@@ -21,7 +21,7 @@ DONE 2. Research about SQlite, how it works and add function to print words from
             1. We can inherit QWidget class and override constructors to make our own widgets. It's useful for new "windows" in app
             2. Before setCentralWidget we need to allocate the widget, because after unsetting it - it will be deleted.
             3. We can send signals between classes of widgets -> useful for events in the main class
-    4.1. Collect a score of the game and save it in SQlite
+    DONE 4.1. Collect a score of the game and save it in SQlite
         DONE 4.1.1. Show the score on the main window
             Useful tips:
                     1. SQlite doesn't have AUTOINCREMENT (wow)
@@ -32,23 +32,25 @@ DONE 2. Research about SQlite, how it works and add function to print words from
                 3. If we use const variable we can use only const methods???? RESEARCH
         DONE 4.1.3. Save score in database
     DONE 4.2. Opportunity to choose amount of words
-    4.3. Opportunity to play game with or without timer
+    DONE 4.3. Opportunity to play game with or without timer
         DONE 4.3.1 Opportunity to play game with timer
         DONE 4.3.2. Disable opportunity to play with timer
         DONE 4.3.3. Create timer for a game
-        4.3.4. If it with timer -> check time and word
+        DONE 4.3.4. If it with timer -> check time and word
     4.4. Opportunity to repeat words after fail 
     4.5. Opportunity to collect fails of words and mark them in the table (1 is 1 error, 2 - 2 times, 3 - 3tm and etc)
     4.6. Opportunity to repeat words that had a lot of fails
-    4.7. After the game - save the time of the words (word - time when it was used)
+    4.7. After the game - save the time of the words (word - last time when it was used)
     4.8. Opportunity to repeat words that hadn't been repeated for a long time
     4.9. Select words from Database
         DONE 4.9.1 Select words by amount
             Useful tips:
                 1. For a widget we can add event closeEvent(QEvent *event) - it will be woke every time when we close the window with widget
-        4.9.2. Select last words (need to add checkbox last)
+        PROCESS 4.9.2. Select last words (need to add checkbox last)
     DONE 4.10. Implement (1) and (2) as widget
         DONE 4.10.1. Save words in db from StartWid
+    DONE 4.11. Enter the word by key pressing (Enter)
+        DONE 4.11.1 Make an event filter for targets (lineEdit and whole widget) -> commented code
 5. Add second game verb -> usage (times or conduction)
     5.1. Create rules of parsing verbs
     5.2. Opportunity to ask verb in first/second/third persons and etc
@@ -66,3 +68,7 @@ DONE e. Make databaseService as a shared_ptr
 f. Make all pointers safe (shared or unique)
 g. Read about inline functions or how to beautify it (beautify addition of widgets in each Widget)
 h. Add check for opened / existed database in all Widgets
+i. Key navigation
+j. Update lamda with normal view
+k. write an event filter class for GameWid
+l. Make full screen window with recounting of widgets' sizes

@@ -27,19 +27,28 @@ private:
     QLabel *wordsLabel = new QLabel("Enter amount of words");
     QLabel *timerLabel = new QLabel("Enter time for a word (s)");
 
-    QCheckBox *checkPlayWithTimer = new QCheckBox("Case sensitive");
+    QCheckBox *checkPlayWithoutTimer = new QCheckBox("Play without timer");
+    QCheckBox *checkGetLastWords = new QCheckBox("Take from the end");
+
+    QLabel *toLabel = new QLabel("Word");
+    QLabel *fromLabel  = new QLabel("Translation");
+    QPushButton *changeFromToButton = new QPushButton("Change");
+    QHBoxLayout *changeLayout = new QHBoxLayout;
 
     bool gameWasStarted = false; // to not duplicate emit of signal
+    bool wordToTranslateSetting = false;
 
-    void setupWordsSpinBox();
-    void setupTimerSpinBox();
-    void setView();
+    inline void setupWordsSpinBox();
+    inline void setupTimerSpinBox();
+    inline void setupChangeBox();
+    inline void setView();
 
     void closeEvent(QCloseEvent *event);
 
 private slots:
     void startGameWithSettings();
     void checkedPlayedWithTimer(int state);
+    void changeEvent();
 
 signals:
     void startGameWithSettingsSig(GameSettings settings);

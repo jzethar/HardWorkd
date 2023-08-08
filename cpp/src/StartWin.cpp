@@ -6,7 +6,7 @@ StartWin::StartWin(QWidget *parent) : QMainWindow(parent)
     setWindowTitle(QString("Hard Wor(k)d"));
     // databaseService->createDatabase("main.wdb");
     startWid->setDatabase(databaseService);
-    gameWid->setDatabase(databaseService);
+    // gameWid->setDatabase(databaseService);
     setCentralWidget(startWid);
     connect(startWid, SIGNAL(startGameSig()), this, SLOT(startGameWid()));
     connect(startWid, SIGNAL(uploadFileSig()), this, SLOT(uploadFileWid()));

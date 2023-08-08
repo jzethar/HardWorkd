@@ -38,6 +38,7 @@ void StartWid::chooseDatabaseFile()
         QMessageBox::critical(this, "Attention", "Can't create database");
         return;
     }
+    setDatabase(databaseService);
 }
 
 void StartWid::startGameSlot() {

@@ -9,6 +9,7 @@ typedef struct WordInfo
     QString word;
     QString translation;
     bool state = true;
+    bool correctness = true;
 
     WordInfo(QString word, QString translation)
     {
@@ -69,18 +70,31 @@ typedef struct GameSettings
     unsigned char words;
     unsigned char timer;
     bool playWithTimer = true;
+    bool wordToTranslation = true; // here if we have true we need to translate "word" to "translation" if false viceversa
+    bool selectLastWords = false;
 
-    GameSettings(unsigned char words, unsigned char timer)
+    GameSettings(unsigned char words, unsigned char timer, bool playWithTimer, bool wordToTranslation, bool selectLastWords)
+    {
+        this->words = words;
+        this->timer = timer;
+        this->playWithTimer = playWithTimer;
+        this->wordToTranslation = wordToTranslation;
+        this->selectLastWords = selectLastWords;
+    }
+
+    GameSettings(unsigned char words, unsigned char timer, bool wordToTranslation)
     {
         this->timer = timer;
         this->words = words;
+        this->wordToTranslation = wordToTranslation;
     }
 
-    GameSettings(unsigned char words)
+    GameSettings(unsigned char words, bool wordToTranslation)
     {
         this->timer = 0;
         this->words = words;
         this->playWithTimer = false;
+        this->wordToTranslation = wordToTranslation;
     }
 
     GameSettings()
