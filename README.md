@@ -6,6 +6,7 @@ This is a simple tool designed to help with memorizing words. It assumes the use
 Main page contains the data of last session, score and database. 
 
 ![main page](docs/01.jpg)
+
 There are 3 options:
 - Start game
 - Upload CSV
@@ -13,19 +14,25 @@ There are 3 options:
 
 ### Start Game
 On starting game there are flexible settings
+
 ![settings](docs/02.jpg)
 
 and main game
+
 ![main game](docs/03.jpg)
+
 After timer is done the new word will be shown.
 
 ### Upload page
 On upload, words from .csv file will be uploaded to the database. 
+
 ![upload](docs/04.jpg)
 
 ### Learn Words
 Finally, there is a possibility to learn some new words by typing memorization, it's not the most effective way, however, for someones it works.
+
 ![memorization](docs/05.jpg)
+
 Simply, it gives 5 attempts to enter the word. 
 
 ## Stack
