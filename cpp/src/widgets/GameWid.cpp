@@ -9,6 +9,7 @@ GameWid::GameWid(QWidget *parent)
 {
     makeLabels();
     gameSettingsWid = new GameSettingsWid(this);
+    wordLabel->setWordWrap(true);
     this->gameWidLayoutV->addWidget(secondsLabel);
     this->gameWidLayoutV->addWidget(wordLabel);
     this->gameWidLayoutV->addWidget(wordEnterEdit);
@@ -41,27 +42,49 @@ void GameWid::startGameWid(GameSettings settings)
 {
     gameSettingsWid->close();
     this->settings = settings;
-    if(this->databaseService != nullptr) {
-        if(this->databaseService->getWords(this->words, this->settings.words)) {
-            if(this->words.size() > 0) {
-                this->timeForWord = settings.timer;
-                this->secondsLabel->setText(QString::number(this->timeForWord));
-                // TODO update it with normal view
-                this->wordLabel->setText([&](const WordInfo &wordInfo)
-                                         { return this->settings.wordToTranslation ? wordInfo.word : wordInfo.translation; }
-                                         (this->words.at(whatTheWordIsNow)));
-                this->timerForWord->start(1000);
-            } 
-        }
+    if(this->databaseService == nullptr) 
+        return;
+    if (this->databaseService->getWords(this->words, this->settings))
+    {
+        if (this->words.size() == 0)
+            return;
+        this->timeForWord = settings.timer;
+        this->secondsLabel->setText(QString::number(this->timeForWord));
+        // TODO update it with normal view
+        this->wordLabel->setText([&](const WordInfo &wordInfo)
+                                 { return this->settings.wordToTranslation ? wordInfo.word : wordInfo.translation; }(this->words.at(whatTheWordIsNow)));
+        this->timerForWord->start(1000);
     }
 }
 
+// rebase words, leave only with errors and emit to a main window
 void GameWid::stopGameSlot()
 {
-    ScoreInfo scoreInfo = ScoreInfo(QDateTime::currentDateTime().toMSecsSinceEpoch(), score);
-    emit stopGameSig(scoreInfo);
+    if (databaseService->updateWords(words))
+    {
+        QList<WordInfo> ercWords;
+        ScoreInfo scoreInfo = ScoreInfo(QDateTime::currentDateTime().toMSecsSinceEpoch(), score);
+        switch ((unsigned char)this->settings.correctErrorsAfterGame)
+        {
+        case true:
+            for (int i = 0; i < this->words.size(); i++)
+            {
+                if (!this->words[i].correctness)
+                    ercWords.append(this->words[i]);
+            }
+            emit stopGameERCSig(scoreInfo, ercWords);
+            break;
+        case false:
+            emit stopGameSig(scoreInfo);
+        default:
+            break;
+        }
+    }
+    else
+    {
+        // TODO anything
+    }
 }
-
 
 void GameWid::setDatabase(std::shared_ptr<DatabaseService> databaseService)
 {
@@ -78,10 +101,13 @@ void GameWid::updateTime()
     this->secondsLabel->setText(QString::number(this->timeForWord));
     if (this->timeForWord == 0)
     {
+        this->words[whatTheWordIsNow].correctness = false;
+        this->words[whatTheWordIsNow].errors += 1;
+        this->words[whatTheWordIsNow].lasttemp = QDateTime::currentDateTime().toMSecsSinceEpoch();
         return nextWord();
     }
     this->timerForWord->start(1000);
-}
+} 
 
 void GameWid::nextWord()
 {
@@ -91,7 +117,6 @@ void GameWid::nextWord()
         return stopGameSlot();
     }
     whatTheWordIsNow += 1;
-    this->words[whatTheWordIsNow].correctness = false;
     this->wordLabel->setText([&](const WordInfo &wordInfo)
                              { return this->settings.wordToTranslation ? wordInfo.word : wordInfo.translation; }(this->words.at(whatTheWordIsNow)));
     this->secondsLabel->setText(QString::number(this->timeForWord));
@@ -110,11 +135,14 @@ void GameWid::checkWord()
     {
         this->words[whatTheWordIsNow].correctness = true;
         this->score += 1;
+        this->words[whatTheWordIsNow].errors = this->words[whatTheWordIsNow].errors > 0 ? this->words[whatTheWordIsNow].errors - 1 : 0;
     }
     else
     {
         this->words[whatTheWordIsNow].correctness = false;
+        this->words[whatTheWordIsNow].errors += 1;
     }
+    this->words[whatTheWordIsNow].lasttemp = QDateTime::currentDateTime().toMSecsSinceEpoch();
     return nextWord();
 }
 

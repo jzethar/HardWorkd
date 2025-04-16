@@ -17,15 +17,21 @@ class DatabaseService {
     bool saveNewWords(const QList<WordInfo> &words);
     bool saveScore(const ScoreInfo& score);
 
-    bool getWords(QList<WordInfo> &words, int amountOfWords, bool getLastWords = false) const;
+    bool getWords(QList<WordInfo> &words, const GameSettings &gameSettings) const;
     bool getLastScore(ScoreInfo &score) const;
+
+    bool updateWords(const QList<WordInfo> &words);
 
     // tables
     bool createTableWords();
     bool createTableScore();
 
+    const QString getPath() const;
+
 private:
     QSqlDatabase wordsDatabase;
+
+    QString path;
 };
 
 #endif // DATABASE_SERVICE_H

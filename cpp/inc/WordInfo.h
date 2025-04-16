@@ -8,6 +8,8 @@ typedef struct WordInfo
 {
     QString word;
     QString translation;
+    long long lasttemp = 0;
+    int errors = 0;
     bool state = true;
     bool correctness = true;
 
@@ -15,6 +17,13 @@ typedef struct WordInfo
     {
         this->word = std::move(word);
         this->translation = translation;
+    }
+    WordInfo(QString word, QString translation, long long lasttemp, int errors)
+    {
+        this->word = std::move(word);
+        this->translation = translation;
+        this->lasttemp = lasttemp;
+        this->errors = errors;
     }
     void set()
     {
@@ -67,19 +76,33 @@ typedef struct ScoreInfo
 
 typedef struct GameSettings
 {
-    unsigned char words;
-    unsigned char timer;
+    unsigned char words = 0;
+    unsigned char timer = 0;
     bool playWithTimer = true;
     bool wordToTranslation = true; // here if we have true we need to translate "word" to "translation" if false viceversa
     bool selectLastWords = false;
+    bool correctErrorsAfterGame = false;
+    bool selectWordsWithMostErrors = false;
+    bool selectUnusedForLongTimeWords = false;
+    bool selectRandom = false;
+    unsigned char repeatAmount = 0;
 
-    GameSettings(unsigned char words, unsigned char timer, bool playWithTimer, bool wordToTranslation, bool selectLastWords)
+    GameSettings(unsigned char words, unsigned char timer,
+                 bool playWithTimer, bool wordToTranslation,
+                 bool selectLastWords, bool correctErrors,
+                 bool selectWordsWithMostErrors,
+                 bool selectUnusedForLongTimeWords,
+                 bool selectRandom)
     {
         this->words = words;
         this->timer = timer;
         this->playWithTimer = playWithTimer;
         this->wordToTranslation = wordToTranslation;
         this->selectLastWords = selectLastWords;
+        this->correctErrorsAfterGame = correctErrors;
+        this->selectWordsWithMostErrors = selectWordsWithMostErrors;
+        this->selectUnusedForLongTimeWords = selectUnusedForLongTimeWords;
+        this->selectRandom = selectRandom;
     }
 
     GameSettings(unsigned char words, unsigned char timer, bool wordToTranslation)
@@ -101,6 +124,7 @@ typedef struct GameSettings
     {
         words = 0;
         timer = 0;
+        wordToTranslation = false;
     }
 
 } GameSettings;

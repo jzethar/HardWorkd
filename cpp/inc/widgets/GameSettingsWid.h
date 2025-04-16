@@ -16,7 +16,7 @@ class GameSettingsWid : public QDialog
     Q_OBJECT
 
 public:
-    GameSettingsWid(QWidget *parent = nullptr);
+    GameSettingsWid(QWidget *parent = nullptr, bool lite = false);
     ~GameSettingsWid();
 
 private:
@@ -29,14 +29,21 @@ private:
 
     QCheckBox *checkPlayWithoutTimer = new QCheckBox("Play without timer");
     QCheckBox *checkGetLastWords = new QCheckBox("Take from the end");
+    QCheckBox *checkCorrectErrors = new QCheckBox("Error correction after game");
 
     QLabel *toLabel = new QLabel("Word");
     QLabel *fromLabel  = new QLabel("Translation");
     QPushButton *changeFromToButton = new QPushButton("Change");
     QHBoxLayout *changeLayout = new QHBoxLayout;
 
+    QCheckBox *selectWordsWithMostErrorsCheck = new QCheckBox("Select words with a most errors");
+    QCheckBox *selectUnusedForLongTimeCheck = new QCheckBox("Select words that hadn't been repeated for a long time");
+    QCheckBox *selectRandomCheck = new QCheckBox("Select in random");
+
     bool gameWasStarted = false; // to not duplicate emit of signal
     bool wordToTranslateSetting = false;
+
+    bool lite = false;
 
     inline void setupWordsSpinBox();
     inline void setupTimerSpinBox();
@@ -47,7 +54,8 @@ private:
 
 private slots:
     void startGameWithSettings();
-    void checkedPlayedWithTimer(int state);
+    void checkedPlayWithoutTimer(int state);
+    // void checkedPlayLastWords(int state);
     void changeEvent();
 
 signals:

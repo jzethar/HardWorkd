@@ -60,6 +60,7 @@ private slots:
 
 signals:
     void stopGameSig(const ScoreInfo &scoreInfo);
+    void stopGameERCSig(const ScoreInfo &scoreInfo, const QList<WordInfo> &words);
     void checkWordSig();
 };
 

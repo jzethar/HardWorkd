@@ -24,33 +24,42 @@ DONE 2. Research about SQlite, how it works and add function to print words from
     DONE 4.1. Collect a score of the game and save it in SQlite
         DONE 4.1.1. Show the score on the main window
             Useful tips:
-                    1. SQlite doesn't have AUTOINCREMENT (wow)
+                    1. SQlite doesn't have AUTOINCREMENT (wow) - no, they have but in different realization
         DONE 4.1.2. Collect the score from the game
             Useful tips:
                 1. We can send from signal to slot data with our own structures
                 2. If function of class doesn't change the state we need to use declare it with const
                 3. If we use const variable we can use only const methods???? RESEARCH
         DONE 4.1.3. Save score in database
+        4.1.4. Show the score after game:
+            - show time for game
+            - show errors amount and words amount
+            - show percent of correct words
     DONE 4.2. Opportunity to choose amount of words
     DONE 4.3. Opportunity to play game with or without timer
         DONE 4.3.1 Opportunity to play game with timer
         DONE 4.3.2. Disable opportunity to play with timer
         DONE 4.3.3. Create timer for a game
         DONE 4.3.4. If it with timer -> check time and word
-    4.4. Opportunity to repeat words after fail 
-    4.5. Opportunity to collect fails of words and mark them in the table (1 is 1 error, 2 - 2 times, 3 - 3tm and etc)
-    4.6. Opportunity to repeat words that had a lot of fails
-    4.7. After the game - save the time of the words (word - last time when it was used)
-    4.8. Opportunity to repeat words that hadn't been repeated for a long time
-    4.9. Select words from Database
+    TODO 4.4. Opportunity to repeat words after fail (here we need (9) task)
+    DONE 4.5. Opportunity to collect fails of words and mark them in the table (1 is 1 error, 2 - 2 times, 3 - 3tm and etc) - add new field in DB
+    DONE 4.6. Opportunity to repeat words that had a lot of fails
+    DONE 4.7. After the game - save the time of the words (word - last time when it was used)
+    DONE 4.8. Opportunity to repeat words that hadn't been repeated for a long time
+    DONE 4.9. Select words from Database
         DONE 4.9.1 Select words by amount
             Useful tips:
-                1. For a widget we can add event closeEvent(QEvent *event) - it will be woke every time when we close the window with widget
-        PROCESS 4.9.2. Select last words (need to add checkbox last)
+                1. For a widget we can add event closeEvent(QEvent *event) - it will wake up every time when we close the window with widget
+        DONE 4.9.2. Select last words (need to add checkbox last)
+        DONE 4.9.3. Select random words
     DONE 4.10. Implement (1) and (2) as widget
         DONE 4.10.1. Save words in db from StartWid
     DONE 4.11. Enter the word by key pressing (Enter)
         DONE 4.11.1 Make an event filter for targets (lineEdit and whole widget) -> commented code
+    4.12. Add opportunity to skip the word
+        DONE 4.12.1 Skip word by key (press ENTER)
+        4.12.2. Skip word by button
+    4.13. Blink red or green as a result of entering the word
 5. Add second game verb -> usage (times or conduction)
     5.1. Create rules of parsing verbs
     5.2. Opportunity to ask verb in first/second/third persons and etc
@@ -58,9 +67,27 @@ DONE 2. Research about SQlite, how it works and add function to print words from
     5.4. Opportunity to save fully irregular verbs
 6. Language constructor
 7. Add third adjective game: word (she/he) -> translation 
+8. CSV Table settings
+    8.1. Opportunity to set flag with or without header
+    8.2. Update function for different types of deliminator and opportunity to read words with ""
+    8.3. Pass empty cells
+    8.4. Trim spaces
+9. Remembering mode - show translation and you need to enter the word
+    9.1. Show the word and translation
+    9.2. Write the word 5 times
+    9.3. Show only translation - enter word
+    9.4.If it's error -> to 9.2.
+    9.5 Go next word -> (9.1.) and repeat previous word
+    9.6. Change the algorithm of study
+10. Make static directories with files
+    DONE 10.1 Read last past to database
+11. Add settings tab:
+    11.1 Set settings file pass
+    11.2 Set default timer
+    11.3 Set default amount of words
 
 Futures:
-a. Update function for different types of deliminator and opportunity to read words with ""
+a. -------------------------------------------
 b. Check if the connector is the same with new
 c. Check that it will not remove and create another table 
 d. Beautify main window - make more user friendly with the score table
@@ -69,6 +96,7 @@ f. Make all pointers safe (shared or unique)
 g. Read about inline functions or how to beautify it (beautify addition of widgets in each Widget)
 h. Add check for opened / existed database in all Widgets
 i. Key navigation
-j. Update lamda with normal view
+j. Update lambda with normal view
 k. write an event filter class for GameWid
 l. Make full screen window with recounting of widgets' sizes
+m. Perhaps we need a mother class for GameWid and LearnWid, cs they have same logic

@@ -3,4 +3,6 @@ build
 *.wdb
 *.csv
 *.txt
+*.ods
+.$MainArc.drawio.bkp
 !CMakeLists.txt

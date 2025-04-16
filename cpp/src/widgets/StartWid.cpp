@@ -4,7 +4,7 @@
 
 // TODO read about inline functions or how to beautify it
 
-StartWid::StartWid(QWidget *parent)
+StartWid::StartWid(QWidget *parent) : parent(parent)
 {
     this->startWidLayoutV->addWidget(labelTime);
     this->startWidLayoutV->addWidget(labelScore);
@@ -13,10 +13,12 @@ StartWid::StartWid(QWidget *parent)
     this->startWidLayoutV->addLayout(databaseLayoutH);
     this->startWidLayoutV->addWidget(startGame);
     this->startWidLayoutV->addWidget(uploadCSVFile);
+    this->startWidLayoutV->addWidget(learnWords);
     this->setLayout(startWidLayoutV);
     connect(startGame, SIGNAL(clicked()), this, SLOT(startGameSlot()));
     connect(uploadCSVFile, SIGNAL(clicked()), this, SLOT(uploadFileSlot()));
     connect(chooseDbButton, SIGNAL(clicked()), this, SLOT(chooseDatabaseFile()));
+    connect(learnWords, SIGNAL(clicked()), this, SLOT(learnWordsSlot()));
 }
 
 StartWid::~StartWid()
@@ -38,15 +40,34 @@ void StartWid::chooseDatabaseFile()
         QMessageBox::critical(this, "Attention", "Can't create database");
         return;
     }
+    updateLastDataBasePath(fileName);
     setDatabase(databaseService);
 }
 
-void StartWid::startGameSlot() {
+void StartWid::updateLastDataBasePath(const QString &lastPath)
+{
+    QFile file("/var/lib/hardwork/last_database.txt");
+    QStringList strings;
+    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    {
+        QTextStream in(&file);
+        in << lastPath;
+    }
+}
+
+void StartWid::startGameSlot()
+{
     emit startGameSig();
 }
 
-void StartWid::uploadFileSlot() {
+void StartWid::uploadFileSlot()
+{
     emit uploadFileSig();
+}
+
+void StartWid::learnWordsSlot()
+{
+    emit learnWordsSig();
 }
 
 void StartWid::setDatabase(std::shared_ptr<DatabaseService> databaseService)
@@ -54,6 +75,7 @@ void StartWid::setDatabase(std::shared_ptr<DatabaseService> databaseService)
     this->databaseService = databaseService;
     if (this->databaseService->isOpen())
     {
+        this->databaseFile->setText(this->databaseService->getPath());
         ScoreInfo score;
         if (this->databaseService->getLastScore(score))
         {

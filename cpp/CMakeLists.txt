@@ -47,7 +47,8 @@ add_executable(HardWord src/main.cpp
                     src/StartWin.cpp inc/StartWin.h
                     src/widgets/StartWid.cpp inc/widgets/StartWid.h
                     src/widgets/GameWid.cpp inc/widgets/GameWid.h
-                    src/widgets/GameSettingsWid.cpp inc/widgets/GameSettingsWid.h)
+                    src/widgets/GameSettingsWid.cpp inc/widgets/GameSettingsWid.h
+                    src/widgets/LearnWordsWid.cpp inc/widgets/LearnWordsWid.h)
 
 # Run MOC on the header file
 set_target_properties(HardWord PROPERTIES AUTOMOC ON)

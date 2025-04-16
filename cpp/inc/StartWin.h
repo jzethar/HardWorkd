@@ -10,6 +10,7 @@
 #include "widgets/GameWid.h"
 #include "widgets/StartWid.h"
 #include "widgets/UploadWid.h"
+#include "widgets/LearnWordsWid.h"
 #include "DatabaseService.h"
 
 class StartWin : public QMainWindow
@@ -21,21 +22,26 @@ public:
     virtual ~StartWin() {}
 
 private:
+    const QString filePath = "/var/lib/hardwork/last_database.txt";
+
     StartWid *startWid = new StartWid(this);
     GameWid *gameWid;
     UploadWid *uploadWid;
-    
+    LearnWordsWid *learnWid;
 
-    // TODO make database as shared_ptr
     std::shared_ptr<DatabaseService> databaseService = std::make_shared<DatabaseService>();
 
-    void initFirstScreen();
+    // void initFirstScreen();
+    void readLastDataBaseFile();
 
 private slots:
     void startGameWid();
+    void ERCLearnWordsWid(const ScoreInfo& score, const QList<WordInfo> &words);
+    void initialScreen(const ScoreInfo& score,  const QList<WordInfo> &words);
     void initialScreen(const ScoreInfo& score);
     void initialScreen();
     void uploadFileWid();
+    void learnWordsWid();
 };
 
 #endif // START_WIN_H

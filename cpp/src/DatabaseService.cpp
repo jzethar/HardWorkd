@@ -4,6 +4,8 @@
 #include "QDebug"
 #include <QSqlQuery>
 #include <QSqlError>
+#include <algorithm>
+#include <random>
 
 DatabaseService::DatabaseService() {}
 
@@ -34,7 +36,8 @@ bool DatabaseService::createTableWords()
     bool success = true;
 
     QSqlQuery query;
-    query.prepare("CREATE TABLE IF NOT exists words(id INTEGER PRIMARY KEY AUTOINCREMENT, word TEXT, translation TEXT);");
+    query.prepare("CREATE TABLE IF NOT exists words" 
+                  "(id INTEGER PRIMARY KEY AUTOINCREMENT, word TEXT, translation TEXT, lasttemp INTEGER, errors INTEGER);");
 
     if (!query.exec())
     {
@@ -70,17 +73,27 @@ bool DatabaseService::isOpen() const
 
 bool DatabaseService::createDatabase(const QString &path)
 {
-    wordsDatabase = QSqlDatabase::addDatabase("QSQLITE");
-    wordsDatabase.setDatabaseName(path);
+    if (path.length() > 0)
+    {
+        this->path = path;
+        wordsDatabase = QSqlDatabase::addDatabase("QSQLITE");
+        wordsDatabase.setDatabaseName(path);
 
-    if (wordsDatabase.open())
-    {
-        return (createTableWords() && createTableScore());
+        if (wordsDatabase.open())
+        {
+            return (createTableWords() && createTableScore());
+        }
+        else
+        {
+            return false;
+        }
     }
-    else
-    {
-        return false;
-    }
+    return true;
+}
+
+const QString DatabaseService::getPath() const
+{
+    return path;
 }
 
 DatabaseService::~DatabaseService()
@@ -91,10 +104,59 @@ DatabaseService::~DatabaseService()
     }
 }
 
-bool DatabaseService::getWords(QList<WordInfo> &words, int amountOfWords, bool getLastWords) const
+bool DatabaseService::getWords(QList<WordInfo> &words, const GameSettings &gameSettings) const
 {
+    // STOPPED HERE
+    QString order = "";
+    if (gameSettings.selectLastWords && gameSettings.selectWordsWithMostErrors && gameSettings.selectUnusedForLongTimeWords)
+    {
+        order = " order by lasttemp asc, errors desc, id desc ";
+    }
+    if (gameSettings.selectLastWords && gameSettings.selectWordsWithMostErrors && !gameSettings.selectUnusedForLongTimeWords)
+    {
+        order = " order by errors desc, id desc ";
+    }
+    if (gameSettings.selectLastWords && !gameSettings.selectWordsWithMostErrors && !gameSettings.selectUnusedForLongTimeWords)
+    {
+        order = " order by id desc ";
+    }
+    if (!gameSettings.selectLastWords && gameSettings.selectWordsWithMostErrors && !gameSettings.selectUnusedForLongTimeWords)
+    {
+        order = " order by errors desc ";
+    }
+    if (!gameSettings.selectLastWords && !gameSettings.selectWordsWithMostErrors && gameSettings.selectUnusedForLongTimeWords)
+    {
+        order = " order by lasttemp asc ";
+    }
+    if (gameSettings.selectRandom)
+    {
+        std::random_device rd;
+        std::mt19937 rng(rd());
+        uint amount = 0;
+        QSqlQuery querySelectWordsAmount;
+        QString selectWordsAmount = QString("SELECT count(*) from words;");
+        querySelectWordsAmount.prepare(selectWordsAmount);
+        if (querySelectWordsAmount.exec())
+        {
+            while (querySelectWordsAmount.next()) 
+            {
+                amount = querySelectWordsAmount.value(0).toUInt();
+            }
+        }
+        std::uniform_int_distribution<> dist(1, amount);
+        order = order + ((gameSettings.words > 0) ? " WHERE " : "");
+        for (int i =0; i < uint(gameSettings.words); i++) 
+        {
+            int random_number = dist(rng);
+            order += "id = " + QString::number(random_number) + " or ";
+        }
+        order.chop(3);
+        
+    }
+
     QSqlQuery querySelectWords;
-    QString selectWords = QString("SELECT word, translation from words ") + QString(getLastWords ? " order by id DESC " : "") + QString("LIMIT ") + QString::number(amountOfWords) + ";";
+    QString selectWords = QString("SELECT word, translation, lasttemp, errors from words ") + order + 
+                          QString("LIMIT ") + QString::number(gameSettings.words) + ";";
     querySelectWords.prepare(selectWords);
     if (querySelectWords.exec())
     {
@@ -103,6 +165,8 @@ bool DatabaseService::getWords(QList<WordInfo> &words, int amountOfWords, bool g
             WordInfo word;
             word.word = querySelectWords.value(0).toString();
             word.translation = querySelectWords.value(1).toString();
+            word.lasttemp = querySelectWords.value(2).toLongLong();
+            word.errors = querySelectWords.value(3).toInt();
             words.insert(words.end(), word);
         }
         return true;
@@ -114,6 +178,8 @@ bool DatabaseService::getWords(QList<WordInfo> &words, int amountOfWords, bool g
     }
     return false;
 }
+
+// bool DatabaseService::getWordsAmount(ScoreInfo &score) const
 
 bool DatabaseService::getLastScore(ScoreInfo &score) const
 {
@@ -138,6 +204,30 @@ bool DatabaseService::getLastScore(ScoreInfo &score) const
     }
 }
 
+bool DatabaseService::updateWords(const QList<WordInfo> &words)
+{
+    for (const auto &w : words)
+    {
+        QSqlQuery queryAdd;
+        queryAdd.prepare("UPDATE words set lasttemp = :lasttemp, errors = :errors where word = :word and translation = :translation");
+        queryAdd.bindValue(":word", w.word);
+        queryAdd.bindValue(":translation", w.translation);
+        queryAdd.bindValue(":lasttemp", w.lasttemp);
+        queryAdd.bindValue(":errors", w.errors);
+
+        if (queryAdd.exec())
+        {
+            continue;
+        }
+        else
+        {
+            qDebug() << "update words failed: " << queryAdd.lastError();
+            return false;
+        }
+    }
+    return true;
+}
+
 bool DatabaseService::saveNewWords(const QList<WordInfo> &words) 
 {
     for (const auto &w : words)
@@ -145,9 +235,11 @@ bool DatabaseService::saveNewWords(const QList<WordInfo> &words)
         if (w.state)
         {
             QSqlQuery queryAdd;
-            queryAdd.prepare("INSERT INTO words (word, translation) VALUES (:word, :translation)");
+            queryAdd.prepare("INSERT INTO words (word, translation, lasttemp, errors) VALUES (:word, :translation, :lasttemp, :errors)");
             queryAdd.bindValue(":word", w.word);
             queryAdd.bindValue(":translation", w.translation);
+            queryAdd.bindValue(":lasttemp", w.lasttemp);
+            queryAdd.bindValue(":errors", w.errors);
 
             if (queryAdd.exec())
             {
