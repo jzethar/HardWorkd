@@ -33,6 +33,7 @@ For running code you need:
 - Qt6
 - cmake 3.22+
 - sqlite3 libraries
+
 This project uses SQLite3 as its database. It's simple and the file can be moved anywhere or easily deleted or truncated.
 In addition there is a python version with an attempt to create Spanish verb tester and it will be still WiP (and in my heart).
 My condolences to all designers and anyone involved in design, but I honestly have no idea how to make things look good
